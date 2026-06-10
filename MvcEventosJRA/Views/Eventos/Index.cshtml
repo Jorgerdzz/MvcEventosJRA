@@ -8,6 +8,35 @@
 <div class="container mt-4">
     <h1 class="text-center text-primary mb-4">🎵 Buscador de Eventos 🎶</h1>
 
+    <!-- Sección de Inteligencia Artificial -->
+    <div class="card shadow border-info mb-5">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0"><i class="bi bi-robot"></i> Asistente de IA para Eventos</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" asp-action="Index" asp-controller="Eventos">
+                <div class="mb-3">
+                    <label for="pregunta" class="form-label">¿Tienes dudas sobre los eventos? ¡Pregúntale a nuestra IA!</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="pregunta" name="pregunta" 
+                               placeholder="Ej. ¿Qué eventos hay de rock en Madrid?" 
+                               value="@ViewData["PREGUNTA"]" required>
+                        <button class="btn btn-primary" type="submit">Preguntar</button>
+                    </div>
+                </div>
+            </form>
+
+            @if (ViewData["RESPUESTA_IA"] != null)
+            {
+                <div class="alert alert-success mt-3 shadow-sm rounded">
+                    <h6 class="alert-heading text-success fw-bold"><i class="bi bi-chat-quote-fill me-2"></i>Respuesta de la IA:</h6>
+                    <hr>
+                    <p class="mb-0" style="white-space: pre-wrap;">@ViewData["RESPUESTA_IA"]</p>
+                </div>
+            }
+        </div>
+    </div>
+
     <!-- Formulario de filtro de categorías -->
     <div class="card shadow-sm p-4 mb-5 bg-light rounded text-center mx-auto" style="max-width: 500px;">
         <h5 class="card-title text-secondary mb-3">Filtrar por Categoría</h5>
