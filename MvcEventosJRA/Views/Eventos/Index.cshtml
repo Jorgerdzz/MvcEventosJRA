@@ -1,0 +1,78 @@
+﻿@model IEnumerable<MvcEventosJRA.Models.Evento>
+
+@{
+    ViewData["Title"] = "Eventos";
+    var categorias = ViewData["CATEGORIAS"] as IEnumerable<MvcEventosJRA.Models.Categoria>;
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-primary mb-4">🎵 Buscador de Eventos 🎶</h1>
+
+    <!-- Formulario de filtro de categorías -->
+    <div class="card shadow-sm p-4 mb-5 bg-light rounded text-center mx-auto" style="max-width: 500px;">
+        <h5 class="card-title text-secondary mb-3">Filtrar por Categoría</h5>
+        <form method="get" asp-controller="Eventos" asp-action="EventosPorCategoria" class="d-flex flex-column align-items-center">
+            <div class="mb-3 w-100">
+                <select name="idCategoria" class="form-select form-select-lg border-primary">
+                    <option value="">-- Selecciona una categoría --</option>
+                    @if (categorias != null)
+                    {
+                        foreach (var cat in categorias)
+                        {
+                            <option value="@cat.IdCategoria">@cat.Nombre</option>
+                        }
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm">Buscar Eventos</button>
+        </form>
+    </div>
+
+    <hr class="mb-5" />
+
+    <!-- Listado de Eventos -->
+    @if (Model != null && Model.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var evento in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 transition-hover">
+                        @if (!string.IsNullOrEmpty(evento.Imagen))
+                        {
+                            <img src="https://bucket-eventos-jra.s3.us-east-1.amazonaws.com/@evento.Imagen" class="card-img-top p-2 rounded" alt="Imagen del evento @evento.Nombre" style="height: 200px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/300x200?text=Sin+Imagen';" />
+                        }
+                        else
+                        {
+                            <img src="https://via.placeholder.com/300x200?text=Sin+Imagen" class="card-img-top p-2 rounded" alt="Sin imagen" style="height: 200px; object-fit: cover; opacity: 0.5;" />
+                        }
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-dark fw-bold">@evento.Nombre</h5>
+                            <p class="card-text text-muted mb-1"><i class="bi bi-person-fill me-1"></i> Artista: <strong>@evento.Artista</strong></p>
+                        </div>
+                        <div class="card-footer bg-white border-top-0 text-center pb-3">
+                            <span class="badge bg-info text-dark rounded-pill px-3 py-2">Categoría ID: @evento.IdCategoria</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center shadow-sm" role="alert">
+            <h4 class="alert-heading">¡Vaya!</h4>
+            <p>No se encontraron eventos para mostrar.</p>
+        </div>
+    }
+</div>
+
+<style>
+    .transition-hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .transition-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    }
+</style>
